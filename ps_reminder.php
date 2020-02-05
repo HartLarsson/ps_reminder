@@ -1,6 +1,6 @@
 <?php
 /*
-* 2007-2015 PrestaShop
+* 2007-2019 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -19,7 +19,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author PrestaShop SA <contact@prestashop.com>
-*  @copyright  2007-2015 PrestaShop SA
+*  @copyright  2007-2019 PrestaShop SA
 *  @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 */
@@ -36,7 +36,7 @@ class Ps_Reminder extends Module
     {
         $this->name = 'ps_reminder';
         $this->tab = 'advertising_marketing';
-        $this->version = '2.0.0';
+        $this->version = '2.0.1';
         $this->author = 'PrestaShop';
         $this->need_instance = 0;
 
@@ -233,7 +233,7 @@ class Ps_Reminder extends Module
                 );
                 Mail::Send(
                     (int)$email['id_lang'],
-                    'followup_1',
+                    'ps_reminder_1',
                     Mail::l(
                         'Your cart and your discount',
                         (int)$email['id_lang']
@@ -365,7 +365,7 @@ class Ps_Reminder extends Module
                 );
                 Mail::Send(
                     (int)$email['id_lang'],
-                    'followup_2',
+                    'ps_reminder_2',
                     Mail::l(
                         'Thanks for your order',
                         (int)$email['id_lang']
@@ -457,7 +457,7 @@ class Ps_Reminder extends Module
                 );
                 Mail::Send(
                     (int)$email['id_lang'],
-                    'followup_3',
+                    'ps_reminder_3',
                     Mail::l(
                         'You are one of our best customers',
                         (int)$email['id_lang']
@@ -566,7 +566,7 @@ class Ps_Reminder extends Module
                 );
                 Mail::Send(
                     (int)$email['id_lang'],
-                    'followup_4',
+                    'ps_reminder_4',
                     Mail::l(
                         'We miss you',
                         (int)$email['id_lang']
@@ -744,13 +744,14 @@ class Ps_Reminder extends Module
 
         $cron_info = '';
         if (Shop::getContext() === Shop::CONTEXT_SHOP) {
+            $cron_url = $this->context->shop->getBaseURL(true, false) . _MODULE_DIR_ .
+                $this->name . '/cron.php?secure_key=' . Configuration::get('PS_FOLLOWUP_SECURE_KEY');            
             $cron_info = $this->trans(
                 'Define the settings and paste the following URL in the crontab, or call it manually on a daily basis:',
                     array(),
                     'Modules.Reminder.Admin'
-                ).'<br /><b>' . $this->context->shop->getBaseURL() .
-                'modules/followup/cron.php?secure_key=' .
-                Configuration::get('PS_FOLLOWUP_SECURE_KEY') . '</b></p>';
+                    ).'<br /><b>' . $cron_url . '</b>' .
+                    ' - <a href="' . $cron_url . '" target="_blank">Open Now</span></a></p>';
         }
 
         $fields_form_1 = array(
